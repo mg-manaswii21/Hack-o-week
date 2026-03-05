@@ -1,0 +1,223 @@
+/* --- Color Variables & Reset --- */
+:root {
+    --bg-color: #F9F7F2;      /* Creamy Off-White Background */
+    --text-dark: #2C2C2C;     /* Soft Black Text */
+    --accent-gold: #C59D5F;   /* Gold for Prices/Accents */
+    --white: #FFFFFF;
+    --font-heading: 'Cormorant Garamond', serif; /* Elegant font */
+    --font-body: 'Montserrat', sans-serif;       /* Clean font */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+    font-family: var(--font-body);
+    line-height: 1.6;
+}
+
+/* --- Header Section --- */
+header {
+    text-align: center;
+    padding: 80px 20px;
+    background-color: var(--text-dark);
+    color: var(--bg-color);
+}
+
+header h1 {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: var(--accent-gold);
+}
+
+.tagline {
+    font-size: 1.2rem;
+    font-weight: 300;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.hours {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* --- Sticky Category Navigation --- */
+.category-nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.category-nav a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.category-nav a:hover {
+    color: var(--accent-gold);
+}
+
+/* --- Menu Container --- */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.menu-section {
+    margin-bottom: 80px;
+    scroll-margin-top: 100px; /* Helps sticky nav not cover title */
+}
+
+.category-title {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+/* Aesthetic line under titles */
+.category-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: var(--accent-gold);
+    margin: 10px auto 0;
+}
+
+/* --- Menu Grid Layout --- */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 40px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    transition: transform 0.3s ease;
+}
+
+.menu-item:hover {
+    transform: translateY(-5px);
+}
+
+/* --- Menu Images --- */
+.menu-item img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 25px;
+    border: 3px solid var(--bg-color);
+    flex-shrink: 0; /* Prevents image from squishing */
+}
+
+/* --- Item Details (Price on Left) --- */
+.item-details {
+    flex: 1;
+}
+
+.item-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.price {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    margin-right: 15px; /* Spacing between price and name */
+    min-width: 65px;    /* Aligns names even if price length changes */
+}
+
+.item-name {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    line-height: 1.2;
+}
+
+.item-desc {
+    font-size: 0.95rem;
+    color: #777;
+    font-weight: 400;
+    margin-left: 80px; /* Indents description to align with Name */
+}
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    padding: 40px;
+    font-size: 0.8rem;
+    color: #888;
+    background-color: #fff;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 600px) {
+    header h1 { font-size: 3rem; }
+    
+    .menu-grid { grid-template-columns: 1fr; }
+    
+    .menu-item {
+        flex-direction: column;
+        text-align: center;
+        padding: 25px;
+    }
+
+    .menu-item img {
+        margin-right: 0;
+        margin-bottom: 15px;
+        width: 120px;
+        height: 120px;
+    }
+
+    .item-header {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .price {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+
+    .item-desc { margin-left: 0; }
+}
