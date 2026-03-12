@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TASK TRACKER</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI, sans-serif;
+}
+
+body{
+background:#f5f1e6;
+min-height:100vh;
+padding:40px;
+transition:.3s;
+}
+
+body.dark{
+background:#1e1e1e;
+color:white;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+h1{
+letter-spacing:2px;
+}
+
+/* BUTTONS */
+
+button{
+padding:10px 16px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-size:14px;
+}
+
+.addBtn{
+background:#cbb89d;
+}
+
+.darkBtn{
+background:#333;
+color:white;
+}
+
+/* INPUT AREA */
+
+.inputSection{
+display:grid;
+grid-template-columns:2fr 1fr 2fr auto;
+gap:10px;
+margin-bottom:20px;
+}
+
+input, textarea{
+padding:10px;
+border:1px solid #ddd;
+border-radius:6px;
+}
+
+textarea{
+resize:none;
+}
+
+/* PROGRESS BAR */
+
+.progressContainer{
+width:100%;
+background:#ddd;
+border-radius:20px;
+height:14px;
+margin-bottom:15px;
+overflow:hidden;
+}
+
+.progressBar{
+height:100%;
+width:0%;
+background:#8bbf7a;
+transition:.3s;
+}
+
+/* TASK */
+
+.task{
+background:white;
+padding:15px;
+border-radius:8px;
+margin-bottom:10px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+animation:fade .3s ease;
+cursor:grab;
+}
+
+body.dark .task{
+background:#2a2a2a;
+}
+
+.task.completed{
+text-decoration:line-through;
+opacity:.6;
+}
+
+.taskInfo{
+flex:1;
+margin-left:12px;
+}
+
+/* CHECK */
+
+.check{
+width:22px;
+height:22px;
+border:2px solid #888;
+border-radius:50%;
+cursor:pointer;
+position:relative;
+}
+
+.check.done{
+background:#8bbf7a;
+border-color:#8bbf7a;
+}
+
+.check.done::after{
+content:"✔";
+color:white;
+position:absolute;
+left:3px;
+top:-2px;
+}
+
+/* DELETE BUTTON */
+
+.actions button{
+margin-left:6px;
+background:#ddd;
+}
+
+/* COUNTER */
+
+.counter{
+margin-top:10px;
+font-size:14px;
+}
+
+/* ANIMATION */
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>TASK TRACKER</h1>
+
+<button class="darkBtn" onclick="toggleDark()">Dark Mode</button>
+
+</header>
+
+<div class="inputSection">
+
+<input id="taskName" placeholder="Task name">
+
+<input type="date" id="dueDate">
+
+<textarea id="notes" placeholder="Notes"></textarea>
+
+<button class="addBtn" onclick="addTask()">Add Task</button>
+
+</div>
+
+<div class="progressContainer">
+<div class="progressBar" id="progressBar"></div>
+</div>
+
+<div id="taskList"></div>
+
+<div class="counter" id="counter"></div>
+
+<script>
+
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+function saveTasks(){
+localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+/* ADD TASK */
+
+function addTask(){
+
+let name=document.getElementById("taskName").value;
+let date=document.getElementById("dueDate").value;
+let notes=document.getElementById("notes").value;
+
+if(name==="") return;
+
+tasks.push({
+name:name,
+date:date,
+notes:notes,
+done:false
+});
+
+saveTasks();
+render();
+
+document.getElementById("taskName").value="";
+document.getElementById("dueDate").value="";
+document.getElementById("notes").value="";
+}
+
+/* TOGGLE COMPLETE */
+
+function toggleTask(i){
+tasks[i].done=!tasks[i].done;
+saveTasks();
+render();
+}
+
+/* DELETE TASK */
+
+function deleteTask(i){
+tasks.splice(i,1);
+saveTasks();
+render();
+}
+
+/* DARK MODE */
+
+function toggleDark(){
+document.body.classList.toggle("dark");
+}
+
+/* RENDER */
+
+function render(){
+
+let list=document.getElementById("taskList");
+list.innerHTML="";
+
+let completed=0;
+
+tasks.forEach((task,i)=>{
+
+if(task.done) completed++;
+
+let div=document.createElement("div");
+div.className="task"+(task.done?" completed":"");
+div.draggable=true;
+
+div.innerHTML=`
+
+<div class="check ${task.done?"done":""}" onclick="toggleTask(${i})"></div>
+
+<div class="taskInfo">
+
+<b>${task.name}</b><br>
+<small>Due: ${task.date || "No date"}</small><br>
+<small>${task.notes || ""}</small>
+
+</div>
+
+<div class="actions">
+<button onclick="deleteTask(${i})">Delete</button>
+</div>
+
+`;
+
+addDragEvents(div,i);
+
+list.appendChild(div);
+
+});
+
+/* COUNTER */
+
+document.getElementById("counter").innerText=
+completed+" / "+tasks.length+" tasks completed";
+
+/* PROGRESS BAR */
+
+let percent = tasks.length ? (completed/tasks.length)*100 : 0;
+document.getElementById("progressBar").style.width=percent+"%";
+
+}
+
+/* DRAG & DROP */
+
+let dragIndex;
+
+function addDragEvents(element,index){
+
+element.addEventListener("dragstart",()=>{
+dragIndex=index;
+});
+
+element.addEventListener("dragover",(e)=>{
+e.preventDefault();
+});
+
+element.addEventListener("drop",()=>{
+
+let temp=tasks[dragIndex];
+tasks.splice(dragIndex,1);
+tasks.splice(index,0,temp);
+
+saveTasks();
+render();
+
+});
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>
