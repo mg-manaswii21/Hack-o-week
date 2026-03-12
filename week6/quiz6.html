@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUIZ</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
+}
+
+body{
+    background:#eef6ff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+.quiz-container{
+    background:#ffffff;
+    width:90%;
+    max-width:600px;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+    text-align:center;
+}
+
+h1{
+    color:#4a90e2;
+    margin-bottom:10px;
+    letter-spacing:1px;
+}
+
+.q-number{
+    font-size:14px;
+    color:#777;
+    margin-bottom:10px;
+}
+
+.progress-bar{
+    width:100%;
+    height:10px;
+    background:#e0ecff;
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:20px;
+}
+
+.progress{
+    height:100%;
+    width:0%;
+    background:#7fb3ff;
+    transition:0.3s;
+}
+
+#start-screen input{
+    width:80%;
+    padding:12px;
+    margin:15px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+
+button{
+    background:#a7c7ff;
+    border:none;
+    padding:12px 20px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:16px;
+    transition:0.3s;
+    margin-top:15px;
+}
+
+button:hover{
+    background:#8fb6ff;
+}
+
+.question{
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.option{
+    display:block;
+    background:#f2f7ff;
+    margin:10px 0;
+    padding:12px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.2s;
+    text-align:left;
+    border:2px solid transparent;
+}
+
+.option.correct{
+    background:#d4f8d4;
+    border-color:#28a745;
+}
+
+.option.wrong{
+    background:#ffd6d6;
+    border-color:#dc3545;
+}
+
+.option:hover{
+    background:#e0ecff;
+}
+
+.hidden{
+    display:none;
+}
+
+#result{
+    font-size:22px;
+    color:#333;
+}
+
+/* Confetti */
+.confetti{
+    position:fixed;
+    width:10px;
+    height:10px;
+    top:-10px;
+    animation:fall linear forwards;
+    z-index:999;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(100vh) rotate(360deg);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="quiz-container">
+
+    <!-- Start Screen -->
+    <div id="start-screen">
+        <h1>QUIZ</h1>
+        <p>Enter your name to begin</p>
+        <input type="text" id="studentName" placeholder="Your name">
+        <br>
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="hidden">
+        <div class="progress-bar">
+            <div id="progress" class="progress"></div>
+        </div>
+        <div id="qNumber" class="q-number"></div>
+        <div id="questionBox" class="question"></div>
+        <div id="optionsBox"></div>
+        <button id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="result-screen" class="hidden">
+        <h1>QUIZ</h1>
+        <p id="result"></p>
+        <button onclick="restartQuiz()">Restart Quiz</button>
+    </div>
+
+</div>
+
+<script>
+const quizData = [
+{
+    question: "What does mental health mainly refer to?",
+    options: ["Physical strength of a person", "Emotional, psychological, and social well-being", "Only the absence of disease", "Intelligence level"],
+    correct: 1
+},
+{
+    question: "Which of the following is a common sign of poor mental health?",
+    options: ["Feeling happy all the time", "Sleeping and eating well regularly", "Feeling extremely sad or anxious for a long time", "Enjoying hobbies and activities"],
+    correct: 2
+},
+{
+    question: "Which activity can help improve mental health?",
+    options: ["Isolating yourself from others", "Regular exercise and talking to supportive people", "Ignoring your emotions", "Sleeping very little"],
+    correct: 1
+},
+{
+    question: "Stress is best described as:",
+    options: ["A physical injury", "A natural reaction to challenges or pressure", "A type of infection", "A permanent mental illness"],
+    correct: 1
+},
+{
+    question: "If someone is struggling with mental health, what is a helpful step?",
+    options: ["Ignore the problem", "Keep everything secret", "Seek help from a trusted person or professional", "Stop talking to everyone"],
+    correct: 2
+}
+];
+
+let currentQuestion = 0;
+let score = 0;
+let studentName = "";
+let answered = false;
+
+function startQuiz(){
+    const nameInput = document.getElementById("studentName").value.trim();
+    if(nameInput === ""){
+        alert("Please enter your name!");
+        return;
+    }
+
+    studentName = nameInput;
+    document.getElementById("start-screen").classList.add("hidden");
+    document.getElementById("quiz-screen").classList.remove("hidden");
+    loadQuestion();
+}
+
+function loadQuestion(){
+    answered = false;
+    document.getElementById("nextBtn").disabled = true;
+
+    const q = quizData[currentQuestion];
+
+    document.getElementById("qNumber").textContent =
+        `Question ${currentQuestion + 1} of ${quizData.length}`;
+
+    document.getElementById("questionBox").textContent = q.question;
+
+    const progressPercent = (currentQuestion / quizData.length) * 100;
+    document.getElementById("progress").style.width = progressPercent + "%";
+
+    const optionsBox = document.getElementById("optionsBox");
+    optionsBox.innerHTML = "";
+
+    q.options.forEach((opt, index)=>{
+        const div = document.createElement("div");
+        div.classList.add("option");
+        div.textContent = opt;
+        div.onclick = () => selectOption(div, index);
+        optionsBox.appendChild(div);
+    });
+}
+
+function selectOption(element, index){
+    if(answered) return;
+    answered = true;
+
+    const correctIndex = quizData[currentQuestion].correct;
+    const allOptions = document.querySelectorAll(".option");
+
+    allOptions.forEach((opt, i)=>{
+        if(i === correctIndex){
+            opt.classList.add("correct");
+        }
+    });
+
+    if(index === correctIndex){
+        score++;
+    } else {
+        element.classList.add("wrong");
+    }
+
+    document.getElementById("nextBtn").disabled = false;
+}
+
+function nextQuestion(){
+    currentQuestion++;
+    if(currentQuestion < quizData.length){
+        loadQuestion();
+    }else{
+        showResult();
+    }
+}
+
+function launchConfetti(){
+    for(let i=0;i<80;i++){
+        const conf = document.createElement("div");
+        conf.className = "confetti";
+        conf.style.left = Math.random()*100 + "vw";
+        conf.style.background =
+            ["#ff6b6b","#ffd93d","#6bcB77","#4d96ff","#ff9ff3"][Math.floor(Math.random()*5)];
+        conf.style.animationDuration = (Math.random()*2 + 1) + "s";
+        document.body.appendChild(conf);
+
+        setTimeout(()=>conf.remove(),2000);
+    }
+}
+
+function showResult(){
+    document.getElementById("quiz-screen").classList.add("hidden");
+    document.getElementById("result-screen").classList.remove("hidden");
+    document.getElementById("progress").style.width = "100%";
+
+    document.getElementById("result").textContent =
+        studentName + ", your score is " + score + " out of " + quizData.length + ".";
+
+    if(score === quizData.length){
+        launchConfetti();
+    }
+}
+
+function restartQuiz(){
+    currentQuestion = 0;
+    score = 0;
+    answered = false;
+
+    document.getElementById("progress").style.width = "0%";
+    document.getElementById("studentName").value = "";
+
+    document.getElementById("result-screen").classList.add("hidden");
+    document.getElementById("start-screen").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>

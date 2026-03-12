@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Glass Weather Dashboard</title>
+<link rel="stylesheet" href="stylep9.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>☁️ Weather Dashboard</h1>
+
+<div class="weather-grid">
+
+<div class="card" id="nagpur">
+<h2>Nagpur 🌆</h2>
+<img class="icon">
+<p>🌡 Temp: <span class="temp"></span> °C</p>
+<p>💧 Humidity: <span class="humidity"></span>%</p>
+<p>🌬 Wind: <span class="wind"></span> km/h</p>
+<p>🌧 Rain Chance: <span class="rain"></span>%</p>
+</div>
+
+<div class="card" id="pune">
+<h2>Pune 🏙</h2>
+<img class="icon">
+<p>🌡 Temp: <span class="temp"></span> °C</p>
+<p>💧 Humidity: <span class="humidity"></span>%</p>
+<p>🌬 Wind: <span class="wind"></span> km/h</p>
+<p>🌧 Rain Chance: <span class="rain"></span>%</p>
+</div>
+
+<div class="card" id="mumbai">
+<h2>Mumbai 🌊</h2>
+<img class="icon">
+<p>🌡 Temp: <span class="temp"></span> °C</p>
+<p>💧 Humidity: <span class="humidity"></span>%</p>
+<p>🌬 Wind: <span class="wind"></span> km/h</p>
+<p>🌧 Rain Chance: <span class="rain"></span>%</p>
+</div>
+
+</div>
+
+<button onclick="refreshWeather()">🔄 Refresh Weather</button>
+
+<div class="fact-box">
+<p id="fact">Click refresh to see a fun weather fact ☀</p>
+</div>
+
+</div>
+
+<script>
+
+const icons={
+sun:"https://cdn-icons-png.flaticon.com/512/869/869869.png",
+cloud:"https://cdn-icons-png.flaticon.com/512/414/414825.png",
+rain:"https://cdn-icons-png.flaticon.com/512/3351/3351979.png"
+}
+
+const facts=[
+"Clouds can weigh over a million kilograms ☁",
+"Lightning is hotter than the surface of the sun ⚡",
+"Raindrops fall at speeds up to 35 km/h 🌧",
+"Some frogs croak before rain 🐸",
+"Why did the meteorologist break up? Too many emotional storms 🌩"
+]
+
+function rand(min,max){
+return Math.floor(Math.random()*(max-min+1))+min
+}
+
+function updateCity(id){
+
+let card=document.getElementById(id)
+
+let temp=rand(22,38)
+let humidity=rand(40,90)
+let wind=rand(5,25)
+let rain=rand(10,90)
+
+card.querySelector(".temp").innerText=temp
+card.querySelector(".humidity").innerText=humidity
+card.querySelector(".wind").innerText=wind
+card.querySelector(".rain").innerText=rain
+
+let icon=icons.sun
+
+if(rain>60) icon=icons.rain
+else if(rain>30) icon=icons.cloud
+
+card.querySelector(".icon").src=icon
+
+}
+
+function refreshWeather(){
+
+updateCity("nagpur")
+updateCity("pune")
+updateCity("mumbai")
+
+document.getElementById("fact").innerText=
+facts[Math.floor(Math.random()*facts.length)]
+
+}
+
+refreshWeather()
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Aesthetic Photo Gallery</title>
+<link rel="stylesheet" href="stylep8.css">
+</head>
+
+<body>
+
+<h1 class="title">My Aesthetic Gallery 📷</h1>
+
+<div class="gallery">
+
+<a href="#img1"><img src="https://picsum.photos/400/500?random=1"></a>
+<a href="#img2"><img src="https://picsum.photos/400/350?random=2"></a>
+<a href="#img3"><img src="https://picsum.photos/400/600?random=3"></a>
+<a href="#img4"><img src="https://picsum.photos/400/450?random=4"></a>
+<a href="#img5"><img src="https://picsum.photos/400/300?random=5"></a>
+<a href="#img6"><img src="https://picsum.photos/400/550?random=6"></a>
+<a href="#img7"><img src="https://picsum.photos/400/350?random=7"></a>
+<a href="#img8"><img src="https://picsum.photos/400/500?random=8"></a>
+<a href="#img9"><img src="https://picsum.photos/400/420?random=9"></a>
+
+</div>
+
+
+<!-- LIGHTBOXES -->
+
+<div id="img1" class="lightbox">
+<a href="#" class="close">✕</a>
+<img src="https://picsum.photos/800/900?random=1">
+<p>Golden sunset over calm hills</p>
+</div>
+
+<div id="img2" class="lightbox">
+<a href="#" class="close">✕</a>
+<img src="https://picsum.photos/800/700?random=2">
+<p>Morning coffee aesthetic</p>
+</div>
+
+<div id="img3" class="lightbox">
+<a href="#" class="close">✕</a>
+<img src="https://picsum.photos/800/900?random=3">
+<p>Pastel city street photography</p>
+</div>
+
+<div id="img4" class="lightbox">
+<a href="#" class="close">✕</a>
+<img src="https://picsum.photos/800/750?random=4">
+<p>Dreamy clouds during sunset</p>
+</div>
+
+<div id="img5" class="lightbox">
+<a href="#" class="close">✕</a>
+<img src="https://picsum.photos/800/600?random=5">
+<p>Soft pink aesthetic flowers</p>
+</div>
+
+<div id="img6" class="lightbox">
+<a href="#" class="close">✕</a>
+<img src="https://picsum.photos/800/850?random=6">
+<p>Ocean breeze peaceful moment</p>
+</div>
+
+<div id="img7" class="lightbox">
+<a href="#" class="close">✕</a>
+<img src="https://picsum.photos/800/650?random=7">
+<p>Quiet night city lights</p>
+</div>
+
+<div id="img8" class="lightbox">
+<a href="#" class="close">✕</a>
+<img src="https://picsum.photos/800/800?random=8">
+<p>Vintage travel vibes</p>
+</div>
+
+<div id="img9" class="lightbox">
+<a href="#" class="close">✕</a>
+<img src="https://picsum.photos/800/720?random=9">
+<p>Golden hour street view</p>
+</div>
+
+</body>
+</html>
+
